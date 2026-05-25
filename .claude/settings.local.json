@@ -9,7 +9,8 @@
       "Bash(nix search *)",
       "Bash(nix-env -qaP --json)",
       "Bash(git -C /home/hobbes/nixos-config add modules/system/tidal.nix)",
-      "Bash(systemctl cat *)"
+      "Bash(systemctl cat *)",
+      "Bash(git add *)"
     ]
   }
 }
