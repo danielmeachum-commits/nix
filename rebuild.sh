@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ $EUID -eq 0 ]]; then
+  echo "Run as your normal user — the script will sudo where needed." >&2
+  exit 1
+fi
+
 REPO="$(cd "$(dirname "$0")" && pwd)"
 HOST="$(hostname)"
 

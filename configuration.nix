@@ -13,6 +13,7 @@
       ./modules/system/vm.nix
       ./modules/system/packages.nix
       ./modules/system/networking.nix
+      ./modules/system/navidrome.nix
     ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

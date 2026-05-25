@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(nixos-rebuild dry-build *)",
-      "Bash(git -C /home/hobbes/nixos add hosts/laptop/default.nix)"
+      "Bash(git -C /home/hobbes/nixos add hosts/laptop/default.nix)",
+      "Bash(nix flake *)",
+      "Bash(git -C /home/hobbes/nixos-config add modules/system/navidrome.nix)",
+      "Bash(git config *)"
     ]
   }
 }
