@@ -16,7 +16,7 @@
 
     musicFolder = lib.mkOption {
       type = lib.types.path;
-      default = config.custom.navidrome.musicFolder or "/home/music";
+      default = config.custom.navidrome.musicFolder or "/srv/music";
       description = ''
         Host path mounted into the container as `/music`. Defaults to
         the same folder Navidrome indexes so downloads show up there.
@@ -67,8 +67,8 @@
 
     # hobbes is uid 1000 / gid 100 (NixOS defaults for the first normal
     # user). Running the container as that uid/gid means downloads land
-    # in `/home/music` already owned by hobbes:users, which Navidrome
-    # (DynamicUser) can read.
+    # in the music folder already owned by hobbes:users, which Navidrome
+    # can read.
     systemd.tmpfiles.rules = [
       "d ${config.custom.lidarr.stateDir} 0755 1000 100 -"
       "d ${config.custom.lidarr.tidalConfigFolder} 0755 1000 100 -"

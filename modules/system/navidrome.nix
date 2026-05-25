@@ -6,7 +6,7 @@
 
     musicFolder = lib.mkOption {
       type = lib.types.path;
-      default = "/home/music";
+      default = "/srv/music";
       description = "Path to the music library Navidrome should index.";
     };
 

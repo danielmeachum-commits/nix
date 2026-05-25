@@ -22,7 +22,13 @@
       "Bash(curl -sLI https://github.com/Back-Slash-N/Lidarr/releases/download/v3.1.2.4913-22/lidarr-plugins.tar.gz)",
       "Bash(curl -sL --range 0-2000000 https://github.com/Back-Slash-N/Lidarr/releases/download/v3.1.2.4913-22/lidarr-plugins.tar.gz)",
       "Bash(tar tzf *)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(systemctl status *)",
+      "Bash(journalctl *)",
+      "Bash(systemctl show *)",
+      "Bash(sudo nsenter *)",
+      "Read(//home/music/**)",
+      "Bash(mountpoint /home/music)"
     ]
   }
 }
