@@ -42,6 +42,7 @@
         niv # https://github.com/nmattia/niv - Nix dependency manager
         claude-code # https://github.com/anthropics/claude-code - Claude Code CLI
         _1password-cli # https://1password.com/ - password manager CLI
+        uv # https://github.com/astral-sh/uv - Python package & tool installer
       ])
       ++ (lib.optionals config.custom.packages.monitoring.enable [
         # System monitoring and performance tools

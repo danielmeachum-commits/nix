@@ -14,6 +14,9 @@
   home.username = "hobbes";
   home.homeDirectory = "/home/hobbes";
 
+  # Picked up by `uv tool install`, `pipx install`, `cargo install`, etc.
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
   # Pin home-manager to a release. Don't change this after first activation.
   home.stateVersion = "26.05";
 

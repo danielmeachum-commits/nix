@@ -14,7 +14,7 @@
       ./modules/system/packages.nix
       ./modules/system/networking.nix
       ./modules/system/navidrome.nix
-      ./modules/system/tidal.nix
+      ./modules/system/lidarr.nix
     ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

@@ -12,7 +12,17 @@
       "Bash(systemctl cat *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(uv tool *)",
+      "WebFetch(domain:wiki.servarr.com)",
+      "Bash(gh api *)",
+      "Bash(nix eval *)",
+      "Bash(gh search *)",
+      "Bash(nixos-option services.lidarr)",
+      "Bash(curl -sLI https://github.com/Back-Slash-N/Lidarr/releases/download/v3.1.2.4913-22/lidarr-plugins.tar.gz)",
+      "Bash(curl -sL --range 0-2000000 https://github.com/Back-Slash-N/Lidarr/releases/download/v3.1.2.4913-22/lidarr-plugins.tar.gz)",
+      "Bash(tar tzf *)",
+      "Bash(git *)"
     ]
   }
 }
