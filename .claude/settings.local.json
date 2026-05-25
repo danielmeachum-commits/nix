@@ -5,7 +5,8 @@
       "Bash(git -C /home/hobbes/nixos add hosts/laptop/default.nix)",
       "Bash(nix flake *)",
       "Bash(git -C /home/hobbes/nixos-config add modules/system/navidrome.nix)",
-      "Bash(git config *)"
+      "Bash(git config *)",
+      "Bash(nix search *)"
     ]
   }
 }

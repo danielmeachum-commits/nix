@@ -56,6 +56,7 @@
         gnome-tweaks # https://wiki.gnome.org/Apps/Tweaks - GNOME settings editor
         _1password-gui # https://1password.com/ - password manager GUI
         mumble # https://www.mumble.info/ - Voice chat client
+        supersonic # https://github.com/dweymouth/supersonic - Subsonic/Navidrome client
       ])
       ++ (lib.optionals config.custom.packages.comparison.enable [
         # Comparison and analysis tools
