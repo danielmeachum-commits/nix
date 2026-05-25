@@ -51,6 +51,7 @@
         hobbes-lap = mkHost {
           hostname = "hobbes-lap";
           hardwarePath = ./hosts/laptop/hardware-configuration.nix;
+          extraSystemModules = [ ./hosts/laptop/default.nix ];
         };
       };
 

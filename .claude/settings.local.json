@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nixos-rebuild dry-build *)",
+      "Bash(git -C /home/hobbes/nixos add hosts/laptop/default.nix)"
+    ]
+  }
+}
