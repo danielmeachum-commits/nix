@@ -1,0 +1,3 @@
+{
+  custom.vmdev.enable = true;
+}
