@@ -31,6 +31,17 @@
       '';
     };
 
+    downloadFolder = lib.mkOption {
+      type = lib.types.path;
+      default = "/home/downloads";
+      description = ''
+        Host path mounted into the container as `/downloads`. Staging
+        folder where the download client writes; Lidarr then imports
+        from here into the library. Keep it on the same filesystem as
+        `musicFolder` so Lidarr can hardlink instead of copy.
+      '';
+    };
+
     stateDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/lidarr-plugins";
@@ -61,6 +72,7 @@
     systemd.tmpfiles.rules = [
       "d ${config.custom.lidarr.stateDir} 0755 1000 100 -"
       "d ${config.custom.lidarr.tidalConfigFolder} 0755 1000 100 -"
+      "d ${config.custom.lidarr.downloadFolder} 0755 1000 100 -"
     ];
 
     virtualisation.oci-containers.containers.lidarr-plugins = {
@@ -78,6 +90,7 @@
         "${config.custom.lidarr.stateDir}:/config"
         "${toString config.custom.lidarr.musicFolder}:/music"
         "${toString config.custom.lidarr.tidalConfigFolder}:/data/tidal-config"
+        "${toString config.custom.lidarr.downloadFolder}:/downloads"
       ];
 
       ports = [
