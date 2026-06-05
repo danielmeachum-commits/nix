@@ -77,6 +77,7 @@
 
     home.packages = with pkgs; [
       jetbrains.idea-oss
+      jetbrains.pycharm-oss
       jetbrains-toolbox
       nil
       nixpkgs-fmt
