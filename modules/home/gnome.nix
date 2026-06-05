@@ -10,7 +10,10 @@
 
     dconf.settings = {
       "org/gnome/shell" = {
-        enabled-extensions = [ "paperwm@paperwm.github.com" ];
+        enabled-extensions = [
+          "paperwm@paperwm.github.com"
+          "GPaste@gnome-shell-extensions.gnome.org"
+        ];
         favorite-apps = [ "firefox.desktop" "org.gnome.Nautilus.desktop" "kitty.desktop" ];
       };
 

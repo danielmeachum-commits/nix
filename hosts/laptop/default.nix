@@ -12,6 +12,9 @@
     epiphany  # GNOME Web — using Firefox instead
   ];
 
+  # Clipboard manager with history (CLI: gpaste-client history)
+  programs.gpaste.enable = true;
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";

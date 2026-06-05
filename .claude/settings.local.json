@@ -28,7 +28,12 @@
       "Bash(systemctl show *)",
       "Bash(sudo nsenter *)",
       "Read(//home/music/**)",
-      "Bash(mountpoint /home/music)"
+      "Bash(mountpoint /home/music)",
+      "Read(//home/hobbes/.config/**)",
+      "Read(//home/hobbes/**)",
+      "Bash(gsettings list-recursively *)",
+      "Bash(dconf dump *)",
+      "Bash(dconf list *)"
     ]
   }
 }
