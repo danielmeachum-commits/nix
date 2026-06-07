@@ -24,6 +24,7 @@
         file # https://darwinsys.com/file/
         openssl # https://www.openssl.org/ - SSL/TLS toolkit
         cacert # CA certificate bundle
+        pcsclite # Smart card reader
       ])
       ++ (lib.optionals config.custom.packages.systemTools.enable [
         # System administration and hardware tools
