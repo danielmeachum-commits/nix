@@ -6,6 +6,17 @@
     profiles.default.extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
       onepassword-password-manager
     ];
+    policies = {
+      # Register OpenSC so Firefox prompts for the CAC on client-cert auth sites.
+      SecurityDevices = {
+        "CAC (OpenSC)" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+      };
+      # Trust roots from the system store (/etc/ssl/certs) — picks up DoD roots
+      # added via security.pki.certificateFiles in modules/system/cac.nix.
+      Certificates = {
+        ImportEnterpriseRoots = true;
+      };
+    };
   };
 
   xdg.mimeApps = {

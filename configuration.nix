@@ -15,6 +15,7 @@
       ./modules/system/networking.nix
       ./modules/system/navidrome.nix
       ./modules/system/lidarr.nix
+      ./modules/system/cac.nix
     ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -101,4 +102,6 @@
   custom.packages.systemTools.enable = true;
   custom.packages.monitoring.enable = true;
   custom.packages.comparison.enable = true;
+
+  custom.cac.enable = true;
 }
