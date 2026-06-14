@@ -16,6 +16,8 @@
       ./modules/system/navidrome.nix
       ./modules/system/lidarr.nix
       ./modules/system/cac.nix
+      ./modules/system/nvidia.nix
+      ./modules/system/llama.nix
     ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

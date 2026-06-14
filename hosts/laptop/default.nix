@@ -35,4 +35,16 @@
   };
 
   custom.packages.guiTools.enable = true;
+
+  # NVIDIA RTX 5070 Mobile (dGPU) + AMD Radeon 890M (iGPU) hybrid.
+  # Bus IDs come from `lspci`: NVIDIA at 64:00.0 -> 0x64 = 100,
+  # AMD iGPU at 65:00.0 -> 0x65 = 101.
+  custom.nvidia.enable = true;
+  custom.nvidia.prime.nvidiaBusId = "PCI:100:0:0";
+  custom.nvidia.prime.otherBusId  = "PCI:101:0:0";
+
+  # llama.cpp with CUDA, exposed via llama-swap on localhost:9292.
+  custom.llama.enable = true;
+  custom.llama.cuda.enable = true;
+  custom.llama.swap.enable = true;
 }
