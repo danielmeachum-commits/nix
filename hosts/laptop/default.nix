@@ -50,4 +50,31 @@
   custom.llama.enable = true;
   custom.llama.cuda.enable = true;
   custom.llama.swap.enable = true;
+
+  # Open WebUI as the chat front-end. Bound to 0.0.0.0 so it's reachable
+  # over Tailscale (tailscale0 is in trustedInterfaces), but openFirewall
+  # is left off so the port stays closed on LAN/WiFi. Hit it from any
+  # tailnet device at http://hobbes-lap:8080
+  services.open-webui = {
+    enable = true;
+    host = "0.0.0.0";
+    port = 8080;
+    environment = {
+      # Telemetry off (matches the upstream module's defaults).
+      SCARF_NO_ANALYTICS = "True";
+      DO_NOT_TRACK = "True";
+      ANONYMIZED_TELEMETRY = "False";
+
+      # We don't run ollama — skip the probes.
+      ENABLE_OLLAMA_API = "False";
+
+      # Point at llama-swap's OpenAI-compatible endpoint.
+      OPENAI_API_BASE_URL = "http://127.0.0.1:9292/v1";
+      OPENAI_API_KEY = "sk-no-auth-needed";
+
+      # Keep auth on — first signup becomes admin. Useful even on a
+      # private tailnet so other devices can't accidentally drive it.
+      WEBUI_AUTH = "True";
+    };
+  };
 }

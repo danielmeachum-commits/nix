@@ -41,7 +41,13 @@
       "Bash(timeout 30 llama-server --model /var/lib/llama-swap/models/gpt-oss-20b-mxfp4.gguf --host 127.0.0.1 --port 19999 -ngl 99 --ctx-size 8192 --jinja)",
       "Bash(llama-server --help)",
       "Read(//proc/**)",
-      "Bash(lscpu)"
+      "Bash(lscpu)",
+      "Bash(nix-instantiate --eval -E 'with import <nixpkgs/nixos> { configuration = {}; }; builtins.hasAttr \"open-webui\" config.services')",
+      "Bash(nix-instantiate --eval -E 'builtins.attrNames \\(import <nixpkgs/nixos> { configuration = {}; }\\).options.services.open-webui')",
+      "Read(//nix/store/**)",
+      "Bash(hostnamectl --static)",
+      "Read(//sys/power/**)",
+      "Bash(lspci -nn)"
     ]
   }
 }
