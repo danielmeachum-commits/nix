@@ -75,9 +75,10 @@ in {
             # File ~12GB; download from https://huggingface.co/ggml-org/gpt-oss-20b-GGUF
             # to ${cfg.swap.modelsDir}/gpt-oss-20b-mxfp4.gguf
             #
-            # With 8GB VRAM on the 5070 Mobile, -ngl 99 attempts full offload
-            # and llama.cpp keeps overflow on CPU. Drop -ngl to ~24 if you see
-            # VRAM OOMs; raise --ctx-size if you have headroom.
+            # On the 5070 Mobile's 8GB VRAM the full weights don't fit, so we
+            # keep the MoE expert tensors on CPU (--cpu-moe). Only the active
+            # path (attention + 4-of-32 experts/token) hits the GPU, which is
+            # the right tradeoff for sparse MoE.
             "gpt-oss-20b":
               aliases: ["gpt-4o-mini", "gpt-4"]
               cmd: |
@@ -85,6 +86,8 @@ in {
                   --model ${cfg.swap.modelsDir}/gpt-oss-20b-mxfp4.gguf
                   --host 127.0.0.1 --port ''${PORT}
                   -ngl 99
+                  --cpu-moe
+                  -fa on
                   --ctx-size 8192
                   --jinja
               ttl: 600
