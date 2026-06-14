@@ -51,6 +51,39 @@
   custom.llama.cuda.enable = true;
   custom.llama.swap.enable = true;
 
+  # The Fresco/ASMedia xHCI controllers behind the Strix Halo USB4 bridge
+  # (0000:00:01.1) come back as "Controller not ready at resume -19" after
+  # s2idle, killing every USB device on the laptop until reboot. This system
+  # only exposes s2idle (no S3), so the practical fix is to PCI-remove those
+  # controllers before suspend and rescan after resume. The on-SoC AMD xHCIs
+  # live under 0000:00:08.* and aren't touched.
+  systemd.services.usb-xhci-resume-fix = {
+    description = "Re-enumerate add-on xHCI controllers around s2idle";
+    before = [ "sleep.target" ];
+    wantedBy = [ "sleep.target" ];
+    unitConfig.StopWhenUnneeded = true;
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = pkgs.writeShellScript "usb-xhci-suspend" ''
+        for dev in /sys/bus/pci/drivers/xhci_hcd/0000:*:*.*; do
+          [ -e "$dev" ] || continue
+          case "$(readlink "$dev")" in
+            */0000:00:01.1/*)
+              bdf=$(basename "$dev")
+              echo "usb-xhci-resume-fix: removing $bdf"
+              echo 1 > "/sys/bus/pci/devices/$bdf/remove"
+              ;;
+          esac
+        done
+      '';
+      ExecStop = pkgs.writeShellScript "usb-xhci-resume" ''
+        echo "usb-xhci-resume-fix: rescanning PCI bus"
+        echo 1 > /sys/bus/pci/rescan
+      '';
+    };
+  };
+
   # Open WebUI as the chat front-end. Bound to 0.0.0.0 so it's reachable
   # over Tailscale (tailscale0 is in trustedInterfaces), but openFirewall
   # is left off so the port stays closed on LAN/WiFi. Hit it from any

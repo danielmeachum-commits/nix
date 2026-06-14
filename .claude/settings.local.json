@@ -47,7 +47,13 @@
       "Read(//nix/store/**)",
       "Bash(hostnamectl --static)",
       "Read(//sys/power/**)",
-      "Bash(lspci -nn)"
+      "Bash(lspci -nn)",
+      "Bash(dmesg)",
+      "Bash(sudo dmesg *)",
+      "Bash(sudo journalctl *)",
+      "Bash(curl -s https://api.github.com/repos/open-webui/open-webui/releases/latest)",
+      "Bash(curl -s 'https://api.github.com/repos/open-webui/open-webui/releases?per_page=5')",
+      "Bash(curl -s 'https://api.github.com/repos/open-webui/open-webui/releases?per_page=8')"
     ]
   }
 }
