@@ -75,10 +75,14 @@ in {
             # File ~12GB; download from https://huggingface.co/ggml-org/gpt-oss-20b-GGUF
             # to ${cfg.swap.modelsDir}/gpt-oss-20b-mxfp4.gguf
             #
-            # On the 5070 Mobile's 8GB VRAM the full weights don't fit, so we
-            # keep the MoE expert tensors on CPU (--cpu-moe). Only the active
-            # path (attention + 4-of-32 experts/token) hits the GPU, which is
-            # the right tradeoff for sparse MoE.
+            # 5070 is dedicated to compute (PRIME offload keeps GNOME on the
+            # AMD iGPU), so ~7.5 GB VRAM is fully ours. Each MoE layer's
+            # experts is ~420 MiB; --n-cpu-moe 10 keeps 10/24 layers on CPU
+            # and ships 14 to GPU → ~7 GB VRAM, ~500 MiB headroom. If load
+            # ever OOMs (e.g. driver update changes overhead), bump to 12.
+            #
+            # -t 12 pins to the HX 370's 12 physical cores (skips SMT); MoE on
+            # CPU is memory-bandwidth-bound and SMT just adds contention.
             "gpt-oss-20b":
               aliases: ["gpt-4o-mini", "gpt-4"]
               cmd: |
@@ -86,8 +90,9 @@ in {
                   --model ${cfg.swap.modelsDir}/gpt-oss-20b-mxfp4.gguf
                   --host 127.0.0.1 --port ''${PORT}
                   -ngl 99
-                  --cpu-moe
+                  --n-cpu-moe 10
                   -fa on
+                  -t 12
                   --ctx-size 8192
                   --jinja
               ttl: 600
