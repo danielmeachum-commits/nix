@@ -18,6 +18,7 @@
       ./modules/system/cac.nix
       ./modules/system/nvidia.nix
       ./modules/system/llama.nix
+      ./modules/system/nix-ld.nix
     ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -106,4 +107,5 @@
   custom.packages.comparison.enable = true;
 
   custom.cac.enable = true;
+  custom.nix-ld.enable = true;
 }
