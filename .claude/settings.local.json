@@ -35,7 +35,9 @@
       "Bash(dconf dump *)",
       "Bash(dconf list *)",
       "Bash(lspci)",
-      "Bash(wait)"
+      "Bash(wait)",
+      "Bash(lsmod)",
+      "Bash(nvidia-smi)"
     ]
   }
 }
