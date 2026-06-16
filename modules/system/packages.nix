@@ -59,6 +59,7 @@
         _1password-gui # https://1password.com/ - password manager GUI
         mumble # https://www.mumble.info/ - Voice chat client
         supersonic # https://github.com/dweymouth/supersonic - Subsonic/Navidrome client
+        obsidian # https://obsidian.md/ - Markdown knowledge base
       ])
       ++ (lib.optionals config.custom.packages.comparison.enable [
         # Comparison and analysis tools

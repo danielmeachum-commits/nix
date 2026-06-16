@@ -105,6 +105,7 @@
   custom.packages.systemTools.enable = true;
   custom.packages.monitoring.enable = true;
   custom.packages.comparison.enable = true;
+  custom.packages.guiTools.enable = true;
 
   custom.cac.enable = true;
   custom.nix-ld.enable = true;

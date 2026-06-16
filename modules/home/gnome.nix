@@ -21,6 +21,12 @@
         natural-scroll = true;
       };
 
+      "org/gnome/shell/extensions/paperwm" = {
+        gesture-enabled = true;
+        gesture-horizontal-fingers = 4;
+        gesture-workspace-fingers = 3;
+      };
+
       "org/gnome/desktop/interface" = {
         scaling-factor = lib.hm.gvariant.mkUint32 2;
       };
