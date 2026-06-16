@@ -23,8 +23,8 @@
 
       "org/gnome/shell/extensions/paperwm" = {
         gesture-enabled = true;
-        gesture-horizontal-fingers = 4;
-        gesture-workspace-fingers = 3;
+        gesture-horizontal-fingers = 3;
+        gesture-workspace-fingers = 4;
       };
 
       "org/gnome/desktop/interface" = {
