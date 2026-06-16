@@ -27,6 +27,10 @@
         gesture-workspace-fingers = 4;
       };
 
+      "org/gnome/desktop/wm/keybindings" = {
+        close = [ "<Super>w" ];
+      };
+
       "org/gnome/desktop/interface" = {
         scaling-factor = lib.hm.gvariant.mkUint32 2;
       };

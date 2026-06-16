@@ -55,7 +55,9 @@
       "Bash(curl -s 'https://api.github.com/repos/open-webui/open-webui/releases?per_page=5')",
       "Bash(curl -s 'https://api.github.com/repos/open-webui/open-webui/releases?per_page=8')",
       "Bash(timeout 15 pycharm-oss)",
-      "Bash(timeout 10 /home/hobbes/.local/share/JetBrains/Toolbox/apps/pycharm/bin/pycharm)"
+      "Bash(timeout 10 /home/hobbes/.local/share/JetBrains/Toolbox/apps/pycharm/bin/pycharm)",
+      "Bash(gsettings get *)",
+      "Bash(gsettings list-keys *)"
     ]
   }
 }
