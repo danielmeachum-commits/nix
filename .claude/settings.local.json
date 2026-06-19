@@ -57,7 +57,18 @@
       "Bash(timeout 15 pycharm-oss)",
       "Bash(timeout 10 /home/hobbes/.local/share/JetBrains/Toolbox/apps/pycharm/bin/pycharm)",
       "Bash(gsettings get *)",
-      "Bash(gsettings list-keys *)"
+      "Bash(gsettings list-keys *)",
+      "Bash(ssh *)",
+      "Bash(getent hosts *)",
+      "Bash(ping -c 1 -W 2 hobbes-svr)",
+      "Bash(lsusb *)",
+      "Bash(ip -brief link show)",
+      "Bash(ip route *)",
+      "Bash(ip neigh *)",
+      "Bash(arp -an)",
+      "Bash(timeout 3 bash -c '</dev/tcp/192.168.1.9/22')",
+      "Bash(ping -c 2 -W 2 192.168.1.9)",
+      "Bash(timeout 3 bash -c '</dev/tcp/192.168.1.9/5900')"
     ]
   }
 }

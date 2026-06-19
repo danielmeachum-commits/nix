@@ -60,6 +60,7 @@
         mumble # https://www.mumble.info/ - Voice chat client
         supersonic # https://github.com/dweymouth/supersonic - Subsonic/Navidrome client
         obsidian # https://obsidian.md/ - Markdown knowledge base
+        rpi-imager # https://www.raspberrypi.com/software/ - Raspberry Pi OS imager
       ])
       ++ (lib.optionals config.custom.packages.comparison.enable [
         # Comparison and analysis tools
