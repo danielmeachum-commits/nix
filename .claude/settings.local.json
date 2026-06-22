@@ -68,7 +68,10 @@
       "Bash(arp -an)",
       "Bash(timeout 3 bash -c '</dev/tcp/192.168.1.9/22')",
       "Bash(ping -c 2 -W 2 192.168.1.9)",
-      "Bash(timeout 3 bash -c '</dev/tcp/192.168.1.9/5900')"
+      "Bash(timeout 3 bash -c '</dev/tcp/192.168.1.9/5900')",
+      "Bash(lsblk *)",
+      "Read(//sys/class/mmc_host/**)",
+      "Read(//dev/**)"
     ]
   }
 }

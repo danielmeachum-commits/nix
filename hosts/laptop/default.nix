@@ -39,6 +39,8 @@
 
   custom.packages.guiTools.enable = true;
 
+  custom.vmdev.enable = true;
+
   # NVIDIA RTX 5070 Mobile (dGPU) + AMD Radeon 890M (iGPU) hybrid.
   # Bus IDs come from `lspci`: NVIDIA at 64:00.0 -> 0x64 = 100,
   # AMD iGPU at 65:00.0 -> 0x65 = 101.
