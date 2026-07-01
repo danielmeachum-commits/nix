@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # Enable the X11 windowing system.
@@ -7,6 +7,13 @@
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+
+  # KDE Plasma 6 available alongside GNOME — pick via the gear icon on the GDM password prompt.
+  services.desktopManager.plasma6.enable = true;
+
+  # GNOME and Plasma both set programs.ssh.askPassword (seahorse vs ksshaskpass);
+  # force GNOME's since it's the primary session.
+  programs.ssh.askPassword = lib.mkForce "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
 
   environment.gnome.excludePackages = with pkgs; [
     epiphany  # GNOME Web — using Firefox instead
