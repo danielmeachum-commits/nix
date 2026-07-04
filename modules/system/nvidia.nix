@@ -8,6 +8,7 @@ in {
 
     prime = {
       offload = lib.mkEnableOption "PRIME render offload (dGPU on demand)" // { default = true; };
+      sync = lib.mkEnableOption "PRIME sync mode (dGPU always on, drives external outputs)";
 
       nvidiaBusId = lib.mkOption {
         type = lib.types.str;
@@ -48,21 +49,25 @@ in {
 
       modesetting.enable = true;
 
-      # Lets the dGPU suspend when idle; pairs with PRIME offload.
       powerManagement.enable = true;
+      # Fine-grained suspend only makes sense with offload; sync keeps dGPU always on.
       powerManagement.finegrained = cfg.prime.offload;
 
       nvidiaSettings = true;
 
-      prime = lib.mkIf cfg.prime.offload ({
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;  # installs `nvidia-offload` wrapper
-        };
-        nvidiaBusId = cfg.prime.nvidiaBusId;
-      } // (if cfg.prime.otherBusIsAmd
-            then { amdgpuBusId = cfg.prime.otherBusId; }
-            else { intelBusId  = cfg.prime.otherBusId; }));
+      prime = lib.mkIf (cfg.prime.offload || cfg.prime.sync) (
+        { nvidiaBusId = cfg.prime.nvidiaBusId; }
+        // (if cfg.prime.otherBusIsAmd
+              then { amdgpuBusId = cfg.prime.otherBusId; }
+              else { intelBusId  = cfg.prime.otherBusId; })
+        // lib.optionalAttrs cfg.prime.offload {
+          offload.enable = true;
+          offload.enableOffloadCmd = true;
+        }
+        // lib.optionalAttrs cfg.prime.sync {
+          sync.enable = true;
+        }
+      );
     };
 
     # CUDA build cache so we don't compile cuda-anything from source.
