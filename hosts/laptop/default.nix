@@ -11,6 +11,11 @@
   # KDE Plasma 6 available alongside GNOME — pick via the gear icon on the GDM password prompt.
   services.desktopManager.plasma6.enable = true;
 
+  # KWin Wayland doesn't auto-discover both GPUs in PRIME offload mode;
+  # explicitly list AMD iGPU (card2) then NVIDIA dGPU (card1) so KWin can
+  # drive the external monitor connected to the NVIDIA output.
+  environment.sessionVariables.KWIN_DRM_DEVICES = "/dev/dri/card2:/dev/dri/card1";
+
   # GNOME and Plasma both set programs.ssh.askPassword (seahorse vs ksshaskpass);
   # force GNOME's since it's the primary session.
   programs.ssh.askPassword = lib.mkForce "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
