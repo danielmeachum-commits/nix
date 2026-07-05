@@ -71,7 +71,19 @@
       "Bash(timeout 3 bash -c '</dev/tcp/192.168.1.9/5900')",
       "Bash(lsblk *)",
       "Read(//sys/class/mmc_host/**)",
-      "Read(//dev/**)"
+      "Read(//dev/**)",
+      "Read(//sys/module/nvidia_drm/parameters/**)",
+      "Read(//sys/bus/pci/drivers/nvidia/**)",
+      "Bash(nixos-option hardware.nvidia.prime)",
+      "Bash(kscreen-doctor -o)",
+      "Read(//sys/devices/virtual/dmi/id/**)",
+      "Bash(systemctl list-unit-files *)",
+      "Bash(systemctl list-units *)",
+      "Bash(echo \"rc=$?\")",
+      "Read(//etc/systemd/system/**)",
+      "Read(//run/current-system/etc/modprobe.d/**)",
+      "Read(//etc/modprobe.d/**)",
+      "Bash(sudo nix-env --list-generations -p /nix/var/nix/profiles/system)"
     ]
   }
 }
