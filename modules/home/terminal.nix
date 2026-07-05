@@ -15,7 +15,7 @@
         cursor_shape = "beam";
         enable_audio_bell = false;
         window_padding_width = 8;
-        hide_window_decorations = "yes";
+        hide_window_decorations = "no";
         confirm_os_window_close = 0;
         copy_on_select = "yes";
         scrollback_lines = 100000;
