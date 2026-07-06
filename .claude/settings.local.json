@@ -83,7 +83,12 @@
       "Read(//etc/systemd/system/**)",
       "Read(//run/current-system/etc/modprobe.d/**)",
       "Read(//etc/modprobe.d/**)",
-      "Bash(sudo nix-env --list-generations -p /nix/var/nix/profiles/system)"
+      "Bash(sudo nix-env --list-generations -p /nix/var/nix/profiles/system)",
+      "Bash(set -e)",
+      "Bash(printf '\\\\n# Git worktrees created under the repo\\\\n.claude/worktrees/\\\\n')",
+      "Bash(home-manager generations *)",
+      "Bash(nixos-rebuild list-generations *)",
+      "Bash(sudo nixos-rebuild switch --flake /home/hobbes/nixos)"
     ]
   }
 }
