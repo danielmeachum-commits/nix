@@ -19,6 +19,12 @@
     };
   };
 
+  # GNOME/Plasma rewrite mimeapps.list at runtime, so every activation wants to
+  # back the live file up — and fails once a stale .hm-backup exists (this broke
+  # home-manager-hobbes.service on every boot/rebuild). Our declared associations
+  # are the source of truth; overwrite instead of backing up.
+  xdg.configFile."mimeapps.list".force = true;
+
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {

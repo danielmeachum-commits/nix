@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Enable the X11 windowing system.
@@ -10,6 +10,9 @@
 
   # KDE Plasma 6 available alongside GNOME — pick via the gear icon on the GDM password prompt.
   services.desktopManager.plasma6.enable = true;
+
+  environment.systemPackages = with pkgs; [ darkly-qt5 darkly ];
+  qt.platformTheme = "qt5ct";
 
   # GNOME and Plasma both set programs.ssh.askPassword (seahorse vs ksshaskpass);
   # force GNOME's since it's the primary session.
@@ -77,6 +80,7 @@
       Type = "oneshot";
       RemainAfterExit = true;
       ExecStart = pkgs.writeShellScript "usb-xhci-suspend" ''
+        removed=0
         for dev in /sys/bus/pci/drivers/xhci_hcd/0000:*:*.*; do
           [ -e "$dev" ] || continue
           case "$(readlink "$dev")" in
@@ -84,9 +88,22 @@
               bdf=$(basename "$dev")
               echo "usb-xhci-resume-fix: removing $bdf"
               echo 1 > "/sys/bus/pci/devices/$bdf/remove"
+              removed=1
               ;;
           esac
         done
+        # The removals fire a hotplug storm (USB disconnects, DP-tunnel HDA
+        # wakeup on the dGPU, desktop audio re-routing) that keeps landing for
+        # a couple of seconds after the writes return. If suspend starts while
+        # those events are still arriving, the kernel sees them as pending
+        # wakeups, aborts the freeze, and logind's instant retry hangs the
+        # machine with the Thunderbolt topology half torn down (2026-07-06).
+        # Drain the queue and give stragglers time to land before sleep.target
+        # is allowed to continue.
+        if [ "$removed" = 1 ]; then
+          ${config.systemd.package}/bin/udevadm settle --timeout=10 || true
+          ${pkgs.coreutils}/bin/sleep 3
+        fi
       '';
       ExecStop = pkgs.writeShellScript "usb-xhci-resume" ''
         echo "usb-xhci-resume-fix: rescanning PCI bus"
