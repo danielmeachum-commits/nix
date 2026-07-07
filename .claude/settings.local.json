@@ -88,7 +88,9 @@
       "Bash(printf '\\\\n# Git worktrees created under the repo\\\\n.claude/worktrees/\\\\n')",
       "Bash(home-manager generations *)",
       "Bash(nixos-rebuild list-generations *)",
-      "Bash(sudo nixos-rebuild switch --flake /home/hobbes/nixos)"
+      "Bash(sudo nixos-rebuild switch --flake /home/hobbes/nixos)",
+      "Bash(sudo -n du -sh /boot/*)",
+      "Bash(nix build *)"
     ]
   }
 }

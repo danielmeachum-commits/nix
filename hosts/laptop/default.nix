@@ -51,6 +51,10 @@
 
   custom.vmdev.enable = true;
 
+  # Themed GRUB (replaces systemd-boot on this host): shows the last 4
+  # generations, Catppuccin theme, and 'w' hotkey to boot Windows.
+  custom.boot.grub.enable = true;
+
   # NVIDIA RTX 5070 Mobile (dGPU) + AMD Radeon 890M (iGPU) hybrid.
   # Bus IDs come from `lspci`: NVIDIA at 64:00.0 -> 0x64 = 100,
   # AMD iGPU at 65:00.0 -> 0x65 = 101.

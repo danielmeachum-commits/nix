@@ -25,7 +25,9 @@
       options = [ "subvol=@home" ];
     };
 
-  fileSystems."/boot" =
+  # ESP mounted at /boot/efi (not /boot) so GRUB keeps its menu, theme, and
+  # kernel references on btrfs — the 256M OEM ESP only holds EFI binaries.
+  fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/D415-6380";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
