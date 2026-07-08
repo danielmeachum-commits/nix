@@ -30,13 +30,24 @@
           { nixpkgs.overlays = [ nur.overlays.default ]; }
 
           home-manager.nixosModules.home-manager
-          {
+          ({ pkgs, ... }: {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "hm-backup";
             home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.hobbes = { imports = [ ./home.nix ] ++ extraHomeModules; };
-          }
+
+            # GNOME/Plasma rewrite some home-manager-managed files at runtime
+            # (mimeapps.list, fontconfig's 10-hm-fonts.conf, ...), so each
+            # activation wants to back the live file up again — and hard-fails
+            # if a .hm-backup with that name is left over from last time. The
+            # backups never hold anything but those desktop rewrites of
+            # declared files, so sweep leftovers before every activation.
+            systemd.services.home-manager-hobbes.preStart = ''
+              ${pkgs.findutils}/bin/find /home/hobbes -maxdepth 1 -name '*.hm-backup' -type f -print -delete || true
+              ${pkgs.findutils}/bin/find /home/hobbes/.config /home/hobbes/.local -name '*.hm-backup' -type f -print -delete || true
+            '';
+          })
         ] ++ extraSystemModules;
       };
     in {

@@ -84,6 +84,32 @@
       Type = "oneshot";
       RemainAfterExit = true;
       ExecStart = pkgs.writeShellScript "usb-xhci-suspend" ''
+        # A suspend ordered moments after dock hotplug (e.g. PowerDevil
+        # re-triggering the lid-close action on resume, before the dock's
+        # monitor is visible) can enter s2idle while the Thunderbolt topology
+        # is still enumerating — on 2026-07-08 that crashed the platform
+        # outright (spontaneous reset, dirty filesystems, no oops captured).
+        # Drain in-flight hotplug, then hold suspend until the newest dock
+        # controller has existed for at least 30s. sysfs directory mtimes are
+        # set at device creation, so they double as enumeration timestamps.
+        ${config.systemd.package}/bin/udevadm settle --timeout=15 || true
+        now=$(${pkgs.coreutils}/bin/date +%s)
+        newest=0
+        for dev in /sys/bus/pci/drivers/xhci_hcd/0000:*:*.*; do
+          [ -e "$dev" ] || continue
+          case "$(readlink "$dev")" in
+            */0000:00:01.1/*)
+              born=$(${pkgs.coreutils}/bin/stat -c %Y "$dev/")
+              [ "$born" -gt "$newest" ] && newest=$born
+              ;;
+          esac
+        done
+        if [ "$newest" -gt 0 ] && [ $((now - newest)) -lt 30 ]; then
+          wait=$((30 - (now - newest)))
+          echo "usb-xhci-resume-fix: dock hotplugged recently; delaying suspend by $wait seconds"
+          ${pkgs.coreutils}/bin/sleep "$wait"
+        fi
+
         removed=0
         for dev in /sys/bus/pci/drivers/xhci_hcd/0000:*:*.*; do
           [ -e "$dev" ] || continue
