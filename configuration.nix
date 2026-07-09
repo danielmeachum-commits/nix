@@ -33,6 +33,14 @@
   };
   systemd.services.systemd-vconsole-setup.unitConfig.After = "local-fs.target";
 
+  # Cap the shutdown hang from GUI apps (e.g. WebStorm/JetBrains) that ignore
+  # SIGTERM. Their transient app scopes otherwise stall shutdown for the full
+  # 90s DefaultTimeoutStopSec before systemd SIGKILLs them. System services keep
+  # the default 90s.
+  systemd.user.extraConfig = ''
+    DefaultTimeoutStopSec=10s
+  '';
+
 
   # Set your time zone.
   time.timeZone = "America/New_York";

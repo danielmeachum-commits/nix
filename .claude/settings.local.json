@@ -90,7 +90,10 @@
       "Bash(nixos-rebuild list-generations *)",
       "Bash(sudo nixos-rebuild switch --flake /home/hobbes/nixos)",
       "Bash(sudo -n du -sh /boot/*)",
-      "Bash(nix build *)"
+      "Bash(nix build *)",
+      "Bash(systemctl list-jobs *)",
+      "Bash(systemd-analyze blame *)",
+      "Bash(awk '/Jul 09 08:4[4-6]:/')"
     ]
   }
 }
