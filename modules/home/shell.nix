@@ -41,6 +41,24 @@
         # Ctrl-R / Ctrl-T fzf bindings
         [[ -f ${pkgs.fzf}/share/fzf/key-bindings.zsh ]] && source ${pkgs.fzf}/share/fzf/key-bindings.zsh
         [[ -f ${pkgs.fzf}/share/fzf/completion.zsh ]] && source ${pkgs.fzf}/share/fzf/completion.zsh
+
+        # captive-login: get onto a captive-portal wifi (Panera, hotels, etc).
+        # Tailscale hijacks DNS and tunnels traffic, which hides the portal, so
+        # we drop it first, nudge NetworkManager to re-probe (this triggers the
+        # GNOME login popup), and open a plain-HTTP non-HSTS page to force the
+        # redirect in Firefox. Press Enter after logging in to restore Tailscale.
+        captive-login() {
+          echo "→ Dropping Tailscale…"
+          sudo ${pkgs.tailscale}/bin/tailscale down
+          echo "→ Re-probing connectivity…"
+          ${pkgs.networkmanager}/bin/nmcli networking connectivity check >/dev/null 2>&1
+          echo "→ Opening portal probe page…"
+          firefox --new-tab http://neverssl.com >/dev/null 2>&1 &
+          echo "→ Log into the portal, then press Enter to bring Tailscale back up."
+          read -r
+          sudo ${pkgs.tailscale}/bin/tailscale up
+          echo "✓ Tailscale restored."
+        }
       '';
     };
 

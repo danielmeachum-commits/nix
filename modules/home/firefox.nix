@@ -6,6 +6,19 @@
     profiles.default.extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
       onepassword-password-manager
     ];
+
+    profiles.default.settings = {
+      # Captive-portal survival. Firefox's DNS-over-HTTPS (TRR) resolves names
+      # over an encrypted channel that bypasses the portal's DNS hijack, so the
+      # login page never loads. Mode 2 keeps DoH but falls back to the OS
+      # resolver when the DoH endpoint is unreachable (as it is behind a portal).
+      "network.trr.mode" = 2;
+
+      # Let Firefox run its own portal probe and show the in-browser
+      # "Log in to network" banner instead of silently failing to load pages.
+      "network.captive-portal-service.enabled" = true;
+      "network.connectivity-service.enabled" = true;
+    };
     policies = {
       # Register OpenSC so Firefox prompts for the CAC on client-cert auth sites.
       SecurityDevices = {

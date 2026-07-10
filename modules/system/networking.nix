@@ -16,7 +16,19 @@
 
   config = lib.mkIf config.custom.networking.enable {
     networking = {
-      networkmanager.enable = true;
+      networkmanager = {
+        enable = true;
+
+        # Connectivity checking: NM periodically fetches this URL and inspects
+        # the response. On a captive-portal network the fetch is redirected, so
+        # NM flips state to "portal" — which is what makes GNOME Shell pop the
+        # "Log in to network" window automatically, both on connect and when a
+        # session later expires. Without this, portals are invisible to GNOME.
+        settings.connectivity = {
+          uri = "http://nmcheck.gnome.org/check_network_status.txt";
+          interval = 300;
+        };
+      };
 
       firewall = lib.mkIf config.custom.networking.tailscale.enable {
         trustedInterfaces = [ "tailscale0" ];
