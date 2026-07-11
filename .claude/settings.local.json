@@ -93,7 +93,9 @@
       "Bash(nix build *)",
       "Bash(systemctl list-jobs *)",
       "Bash(systemd-analyze blame *)",
-      "Bash(awk '/Jul 09 08:4[4-6]:/')"
+      "Bash(awk '/Jul 09 08:4[4-6]:/')",
+      "Bash(patchelf --print-interpreter /home/hobbes/.local/share/JetBrains/Toolbox/apps/webstorm/bin/webstorm)",
+      "Bash(readelf -l /home/hobbes/.local/share/JetBrains/Toolbox/apps/webstorm/bin/webstorm)"
     ]
   }
 }

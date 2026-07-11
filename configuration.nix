@@ -117,4 +117,10 @@
 
   custom.cac.enable = true;
   custom.nix-ld.enable = true;
+
+  # Populate /bin and /usr/bin with symlinks to executables on PATH so
+  # FHS-style scripts with hardcoded shebangs (e.g. JetBrains Toolbox's
+  # generated /bin/bash launchers) run. Complements nix-ld, which only
+  # fixes dynamic linking of ELF binaries, not interpreter paths.
+  services.envfs.enable = true;
 }
