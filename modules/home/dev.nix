@@ -73,6 +73,7 @@
         # ---- Cloud / infra ----
         opentofu
         ansible
+        supabase-cli
 
         # ---- Network / debug ----
         nmap
