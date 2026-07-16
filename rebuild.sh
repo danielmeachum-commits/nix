@@ -22,7 +22,20 @@ if git -C "$REPO" diff --cached --quiet; then
 fi
 
 echo ""
-read -r -p "Commit message: " msg
+echo "==> Asking claude for a commit message suggestion..."
+suggested_msg="$(git -C "$REPO" diff --cached | claude -p \
+  "Write a concise git commit message (subject line only, imperative mood, no trailing period) for this diff. Output ONLY the commit message, nothing else." \
+  2>/dev/null || true)"
+
+if [[ -n "$suggested_msg" ]]; then
+  echo "Suggested: $suggested_msg"
+fi
+
+read -r -p "Commit message [Enter to accept suggestion]: " msg
+
+if [[ -z "$msg" ]]; then
+  msg="$suggested_msg"
+fi
 
 if [[ -z "$msg" ]]; then
   echo "Aborting commit (empty message)."
