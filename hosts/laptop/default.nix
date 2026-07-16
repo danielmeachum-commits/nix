@@ -11,7 +11,7 @@
   # KDE Plasma 6 available alongside GNOME — pick via the gear icon on the GDM password prompt.
   services.desktopManager.plasma6.enable = true;
 
-  environment.systemPackages = with pkgs; [ darkly-qt5 darkly ];
+  environment.systemPackages = with pkgs; [ darkly-qt5 darkly libreoffice ];
   qt.platformTheme = "qt5ct";
 
   # GNOME and Plasma both set programs.ssh.askPassword (seahorse vs ksshaskpass);
