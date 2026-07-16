@@ -96,7 +96,8 @@
       "Bash(awk '/Jul 09 08:4[4-6]:/')",
       "Bash(patchelf --print-interpreter /home/hobbes/.local/share/JetBrains/Toolbox/apps/webstorm/bin/webstorm)",
       "Bash(readelf -l /home/hobbes/.local/share/JetBrains/Toolbox/apps/webstorm/bin/webstorm)",
-      "Bash(nix run *)"
+      "Bash(nix run *)",
+      "Bash(gh auth *)"
     ]
   }
 }

@@ -44,4 +44,21 @@ if [[ -z "$msg" ]]; then
 fi
 
 git -C "$REPO" commit -m "$msg"
+
+echo ""
+echo "==> Verifying gh user matches repo owner..."
+remote_url="$(git -C "$REPO" remote get-url origin)"
+expected_user="$(echo "$remote_url" | sed -E 's#^(https?://|git@)github\.com[:/]##; s#/.*##')"
+active_user="$(gh auth status 2>&1 | grep -B1 'Active account: true' | grep 'Logged in' | sed -E 's/.*account ([^ ]+).*/\1/')"
+
+if [[ -z "$expected_user" ]]; then
+  echo "Warning: could not determine expected gh user from remote URL ($remote_url); skipping check." >&2
+elif [[ "$active_user" != "$expected_user" ]]; then
+  echo "Active gh user is '$active_user', but this repo belongs to '$expected_user'."
+  echo "==> Switching gh account to '$expected_user'..."
+  gh auth switch -u "$expected_user"
+else
+  echo "gh user OK: $active_user"
+fi
+
 git -C "$REPO" push
