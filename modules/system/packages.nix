@@ -20,6 +20,7 @@
         wget # https://www.gnu.org/software/wget/
         git # https://git-scm.com/
         github-cli # https://cli.github.com/ - Git Hub CLI
+        glab # https://gitlab.com/gitlab-org/cli - GitLab CLI
         curl # https://curl.se/
         file # https://darwinsys.com/file/
         openssl # https://www.openssl.org/ - SSL/TLS toolkit

@@ -1,0 +1,8 @@
+keys:
+  - &hobbes age1r5vectzlyw5y2aj9teus7437hu20svjghhfvs25lt8pa3c4tye2sh9dxl8
+
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *hobbes

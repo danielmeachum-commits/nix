@@ -38,6 +38,10 @@
       };
 
       initContent = ''
+        # sops-nix decrypts secrets (e.g. LINEAR_API_KEY) to a runtime-only
+        # path at activation; see modules/home/secrets.nix.
+        [[ -f "${config.sops.templates."env-secrets.sh".path}" ]] && source "${config.sops.templates."env-secrets.sh".path}"
+
         # Ctrl-R / Ctrl-T fzf bindings
         [[ -f ${pkgs.fzf}/share/fzf/key-bindings.zsh ]] && source ${pkgs.fzf}/share/fzf/key-bindings.zsh
         [[ -f ${pkgs.fzf}/share/fzf/completion.zsh ]] && source ${pkgs.fzf}/share/fzf/completion.zsh

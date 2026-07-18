@@ -1,3 +1,8 @@
 
 # Git worktrees created under the repo
 .claude/worktrees/
+
+# sops age private keys should only ever live in ~/.config/sops/age/ —
+# this is a safety net in case one is ever dropped in-repo by mistake.
+**/age/keys.txt
+*.agekey

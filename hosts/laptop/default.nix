@@ -22,6 +22,17 @@
     epiphany  # GNOME Web — using Firefox instead
   ];
 
+  # gnome-keyring is the intended sole Secret Service provider (pinned
+  # explicitly here, though GNOME's module already defaults it on). KWallet's
+  # kwallet/kwallet-pam/kwalletmanager can't be excluded from the Plasma
+  # session — nixpkgs hardcodes them as required packages — so on login
+  # KWallet's ksecretd was winning the org.freedesktop.secrets D-Bus name
+  # ahead of gnome-keyring, which is why CLI tools (pnpm, npm, etc.) storing
+  # API keys via libsecret failed with "no keyring found" in the Plasma
+  # session. Actual fix lives in ~/.config/kwalletrc ([Wallet] Enabled=false),
+  # which stops KWallet's subsystem — including ksecretd — from starting.
+  services.gnome.gnome-keyring.enable = true;
+
   # Clipboard manager with history (CLI: gpaste-client history)
   programs.gpaste.enable = true;
 

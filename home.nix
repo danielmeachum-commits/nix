@@ -9,6 +9,7 @@
     ./modules/home/dev.nix
     ./modules/home/gnome.nix
     ./modules/home/firefox.nix
+    ./modules/home/secrets.nix
   ];
 
   home.username = "hobbes";

@@ -97,7 +97,9 @@
       "Bash(patchelf --print-interpreter /home/hobbes/.local/share/JetBrains/Toolbox/apps/webstorm/bin/webstorm)",
       "Bash(readelf -l /home/hobbes/.local/share/JetBrains/Toolbox/apps/webstorm/bin/webstorm)",
       "Bash(nix run *)",
-      "Bash(gh auth *)"
+      "Bash(gh auth *)",
+      "Bash(nix-instantiate --eval -E '\\(import <nixpkgs/nixos> {}\\).options.environment.plasma6.excludePackages.description or \"not found\"')",
+      "Bash(python3 -c ' *)"
     ]
   }
 }
