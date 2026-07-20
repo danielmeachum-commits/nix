@@ -99,7 +99,8 @@
       "Bash(nix run *)",
       "Bash(gh auth *)",
       "Bash(nix-instantiate --eval -E '\\(import <nixpkgs/nixos> {}\\).options.environment.plasma6.excludePackages.description or \"not found\"')",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }

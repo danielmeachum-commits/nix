@@ -11,7 +11,11 @@
   # KDE Plasma 6 available alongside GNOME — pick via the gear icon on the GDM password prompt.
   services.desktopManager.plasma6.enable = true;
 
-  environment.systemPackages = with pkgs; [ darkly-qt5 darkly libreoffice ];
+  # opencode: terminal AI coding agent (also the engine OpenChamber drives).
+  # OpenChamber has no Linux desktop build despite its README — the supported
+  # Linux path is the `@openchamber/web` npm package, installed imperatively
+  # with `pnpm add -g @openchamber/web` and run via `openchamber serve`.
+  environment.systemPackages = with pkgs; [ darkly-qt5 darkly libreoffice opencode ];
   qt.platformTheme = "qt5ct";
 
   # GNOME and Plasma both set programs.ssh.askPassword (seahorse vs ksshaskpass);
