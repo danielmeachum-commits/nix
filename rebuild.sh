@@ -31,7 +31,8 @@ if [[ -n "$suggested_msg" ]]; then
   echo "Suggested: $suggested_msg"
 fi
 
-read -r -p "Commit message [Enter to accept suggestion]: " msg
+read -r -t 3 -p "Commit message [Enter to accept suggestion, auto-accepts in 3s]: " msg || true
+echo ""
 
 if [[ -z "$msg" ]]; then
   msg="$suggested_msg"
@@ -49,7 +50,7 @@ echo ""
 echo "==> Verifying gh user matches repo owner..."
 remote_url="$(git -C "$REPO" remote get-url origin)"
 expected_user="$(echo "$remote_url" | sed -E 's#^(https?://|git@)github\.com[:/]##; s#/.*##')"
-active_user="$(gh auth status 2>&1 | grep -B1 'Active account: true' | grep 'Logged in' | sed -E 's/.*account ([^ ]+).*/\1/')"
+active_user="$(gh auth status 2>&1 | grep -B1 'Active account: true' | grep 'Logged in' | sed -E 's/.*account ([^ ]+).*/\1/')" || true
 
 if [[ -z "$expected_user" ]]; then
   echo "Warning: could not determine expected gh user from remote URL ($remote_url); skipping check." >&2
