@@ -106,7 +106,9 @@
       "Bash(echo \"script exit: $?\")",
       "Bash(lspci -s 64:00.0 -v)",
       "Bash(lspci -tv)",
-      "Bash(command -v direnv)"
+      "Bash(command -v direnv)",
+      "Bash(pnpm --version)",
+      "Bash(pnpm store *)"
     ]
   }
 }
