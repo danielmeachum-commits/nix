@@ -50,7 +50,7 @@
         black
 
         # ---- Node ----
-        nodejs_25
+        nodejs_25           # bundles npm
         pnpm
         yarn
         bun
