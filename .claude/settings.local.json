@@ -100,7 +100,13 @@
       "Bash(gh auth *)",
       "Bash(nix-instantiate --eval -E '\\(import <nixpkgs/nixos> {}\\).options.environment.plasma6.excludePackages.description or \"not found\"')",
       "Bash(python3 -c ' *)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(bash -c 'set -euo pipefail; x=$\\(false\\); echo \"got here: $x\"')",
+      "Bash(echo \"script exit: $?\")",
+      "Bash(lspci -s 64:00.0 -v)",
+      "Bash(lspci -tv)",
+      "Bash(command -v direnv)"
     ]
   }
 }
