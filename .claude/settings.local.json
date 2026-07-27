@@ -108,7 +108,9 @@
       "Bash(lspci -tv)",
       "Bash(command -v direnv)",
       "Bash(pnpm --version)",
-      "Bash(pnpm store *)"
+      "Bash(pnpm store *)",
+      "Bash(podman ps *)",
+      "Bash(systemctl list-timers *)"
     ]
   }
 }

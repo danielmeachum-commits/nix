@@ -37,6 +37,17 @@
   # which stops KWallet's subsystem — including ksecretd — from starting.
   services.gnome.gnome-keyring.enable = true;
 
+  # Steam. The 32-bit graphics stack it needs is already on via
+  # custom.nvidia (hardware.graphics.enable32Bit), as is pipewire's
+  # alsa.support32Bit. gamescopeSession gives a Big Picture-style session
+  # selectable from GDM.
+  programs.steam = {
+    enable = true;
+    gamescopeSession.enable = true;
+    remotePlay.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true;
+  };
+
   # Clipboard manager with history (CLI: gpaste-client history)
   programs.gpaste.enable = true;
 
