@@ -15,7 +15,9 @@
   # OpenChamber has no Linux desktop build despite its README — the supported
   # Linux path is the `@openchamber/web` npm package, installed imperatively
   # with `pnpm add -g @openchamber/web` and run via `openchamber serve`.
-  environment.systemPackages = with pkgs; [ darkly-qt5 darkly libreoffice opencode openspec ];
+  # antigravity: Google's agent-first IDE (unfree; allowUnfree is set in
+  # configuration.nix). Ships its own .desktop entry.
+  environment.systemPackages = with pkgs; [ antigravity darkly-qt5 darkly libreoffice opencode openspec ];
   qt.platformTheme = "qt5ct";
 
   # GNOME and Plasma both set programs.ssh.askPassword (seahorse vs ksshaskpass);
