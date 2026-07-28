@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   # Enable the X11 windowing system.
@@ -17,7 +17,18 @@
   # with `pnpm add -g @openchamber/web` and run via `openchamber serve`.
   # antigravity: Google's agent-first IDE (unfree; allowUnfree is set in
   # configuration.nix). Ships its own .desktop entry.
-  environment.systemPackages = with pkgs; [ antigravity darkly-qt5 darkly libreoffice opencode openspec ];
+  # treehouse: from the flake input of the same name, which exposes only
+  # `packages` (no nixosModule/overlay), so it has to be referenced explicitly.
+  # Laptop-only by living in this host module rather than configuration.nix.
+  environment.systemPackages = with pkgs; [
+    antigravity
+    darkly-qt5
+    darkly
+    libreoffice
+    opencode
+    openspec
+    inputs.treehouse.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
   qt.platformTheme = "qt5ct";
 
   # GNOME and Plasma both set programs.ssh.askPassword (seahorse vs ksshaskpass);

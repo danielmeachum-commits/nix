@@ -19,6 +19,7 @@
       ./modules/system/nvidia.nix
       ./modules/system/llama.nix
       ./modules/system/nix-ld.nix
+      ./modules/system/memory.nix
     ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -117,6 +118,7 @@
 
   custom.cac.enable = true;
   custom.nix-ld.enable = true;
+  custom.memory.enable = true;
 
   # Populate /bin and /usr/bin with symlinks to executables on PATH so
   # FHS-style scripts with hardcoded shebangs (e.g. JetBrains Toolbox's
