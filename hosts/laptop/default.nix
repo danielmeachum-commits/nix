@@ -169,9 +169,36 @@
         # machine with the Thunderbolt topology half torn down (2026-07-06).
         # Drain the queue and give stragglers time to land before sleep.target
         # is allowed to continue.
+        # A fixed drain window is fragile: the 3s used until 2026-07-31 stopped
+        # covering the storm's tail, which had grown to land ~4.3s after the
+        # last removal — i.e. ~1.25s into the suspend. Every docked suspend that
+        # day aborted ("Freezing user space processes aborted ... 0.001 seconds"
+        # — the kernel says "aborted" rather than "failed", and prints no task
+        # list, only when a wakeup was already pending) and logind's instant
+        # retry then hung the machine. So wait on the condition that actually
+        # matters instead of a duration: /sys/power/wakeup_count is the same
+        # counter pm_wakeup_pending() consults, so hold sleep.target until it
+        # has stopped moving. Floor of 3s keeps the old behaviour as a minimum,
+        # ceiling of 15s keeps a genuinely chatty device from blocking sleep.
         if [ "$removed" = 1 ]; then
           ${config.systemd.package}/bin/udevadm settle --timeout=10 || true
           ${pkgs.coreutils}/bin/sleep 3
+
+          deadline=$(( $(${pkgs.coreutils}/bin/date +%s) + 15 ))
+          last=$(${pkgs.coreutils}/bin/cat /sys/power/wakeup_count 2>/dev/null || echo 0)
+          quiet=0
+          while [ "$(${pkgs.coreutils}/bin/date +%s)" -lt "$deadline" ]; do
+            ${pkgs.coreutils}/bin/sleep 1
+            cur=$(${pkgs.coreutils}/bin/cat /sys/power/wakeup_count 2>/dev/null || echo 0)
+            if [ "$cur" = "$last" ]; then
+              quiet=$((quiet + 1))
+              [ "$quiet" -ge 3 ] && break
+            else
+              quiet=0
+              last=$cur
+            fi
+          done
+          echo "usb-xhci-resume-fix: wakeup events quiesced at count=$last"
         fi
       '';
       ExecStop = pkgs.writeShellScript "usb-xhci-resume" ''
