@@ -103,6 +103,23 @@
   custom.nvidia.prime.nvidiaBusId = "PCI:100:0:0";
   custom.nvidia.prime.otherBusId  = "PCI:101:0:0";
 
+  # The TP-Link USB WiFi dongle (Realtek, 0bda:1a2b) enumerates as a
+  # mass-storage device holding its Windows drivers ("Driver CDROM Mode")
+  # and never exposes a wlan interface. usb-modeswitch's udev rule sends the
+  # SCSI eject that makes it re-enumerate as the actual WLAN adapter.
+  hardware.usb-modeswitch.enable = true;
+
+  # Once switched it comes up as an RTL8852CU (35bc:0102) on the in-kernel
+  # rtw89_8852cu driver — no extra module or firmware needed. The default
+  # predictable name is path-derived (wlp103s0f0u1), so it changes whenever
+  # the dongle moves to another port; match on its permanent MAC instead.
+  # .link files are applied by udev at device rename time, so this works
+  # without systemd-networkd (NetworkManager stays in charge of the link).
+  systemd.network.links."10-wifi-dongle" = {
+    matchConfig.MACAddress = "a8:6e:84:34:45:db";
+    linkConfig.Name = "wlan-usb";
+  };
+
   # llama.cpp with CUDA, exposed via llama-swap on localhost:9292.
   custom.llama.enable = true;
   custom.llama.cuda.enable = true;
