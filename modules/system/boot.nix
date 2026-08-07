@@ -14,6 +14,11 @@ in
         default = "D415-6380";
         description = "Filesystem UUID of the EFI partition containing the Windows boot manager.";
       };
+      popEspUuid = lib.mkOption {
+        type = lib.types.str;
+        default = "D98A-2570";
+        description = "Filesystem UUID of the EFI partition containing the Pop!_OS systemd-boot.";
+      };
     };
   };
 
@@ -45,6 +50,18 @@ in
           insmod chain
           search --no-floppy --fs-uuid --set=root ${cfg.grub.windowsEspUuid}
           chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+        }
+
+        # Pop!_OS lives on its own 2GiB ESP (p9) because kernelstub copies the
+        # kernel + initrd onto the ESP and would not fit alongside Windows on
+        # the 260MiB p1. Chainload its systemd-boot rather than hardcoding
+        # kernel paths, so Pop's kernel updates need no change here.
+        menuentry "Pop!_OS" --class pop --hotkey=p {
+          insmod part_gpt
+          insmod fat
+          insmod chain
+          search --no-floppy --fs-uuid --set=root ${cfg.grub.popEspUuid}
+          chainloader /EFI/systemd/systemd-bootx64.efi
         }
       '';
     };
