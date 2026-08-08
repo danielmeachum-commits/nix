@@ -14,10 +14,15 @@ in
         default = "D415-6380";
         description = "Filesystem UUID of the EFI partition containing the Windows boot manager.";
       };
-      popEspUuid = lib.mkOption {
+      cachyEspUuid = lib.mkOption {
         type = lib.types.str;
-        default = "D98A-2570";
-        description = "Filesystem UUID of the EFI partition containing the Pop!_OS systemd-boot.";
+        default = "8955-10D9";
+        description = "Filesystem UUID of the boot partition (p9, label CACHYBOOT) holding the CachyOS Limine bootloader.";
+      };
+      cachyRootUuid = lib.mkOption {
+        type = lib.types.str;
+        default = "d8c37f97-0618-47fe-90db-30c52c0de712";
+        description = "Filesystem UUID of the CachyOS btrfs root (p8), used by the direct-kernel fallback entry.";
       };
     };
   };
@@ -52,16 +57,29 @@ in
           chainloader /EFI/Microsoft/Boot/bootmgfw.efi
         }
 
-        # Pop!_OS lives on its own 2GiB ESP (p9) because kernelstub copies the
-        # kernel + initrd onto the ESP and would not fit alongside Windows on
-        # the 260MiB p1. Chainload its systemd-boot rather than hardcoding
-        # kernel paths, so Pop's kernel updates need no change here.
-        menuentry "Pop!_OS" --class pop --hotkey=p {
+        # CachyOS replaced Pop!_OS on p8/p9 in 2026-08. It keeps its kernels and
+        # its bootloader (Limine, not systemd-boot) on its own 4GiB partition
+        # p9, so nothing here has to fit on the 260MiB p1 alongside Windows.
+        # Chainload Limine rather than hardcoding kernel paths, so CachyOS
+        # kernel updates need no change here.
+        menuentry "CachyOS" --class cachyos --class arch --hotkey=c {
           insmod part_gpt
           insmod fat
           insmod chain
-          search --no-floppy --fs-uuid --set=root ${cfg.grub.popEspUuid}
-          chainloader /EFI/systemd/systemd-bootx64.efi
+          search --no-floppy --fs-uuid --set=root ${cfg.grub.cachyEspUuid}
+          chainloader /EFI/limine/limine_x64.efi
+        }
+
+        # Fallback in case the Limine chainload misbehaves: boot the CachyOS
+        # kernel directly. pacman keeps these two paths stable across kernel
+        # updates, so this entry does not need maintenance either. Delete it
+        # once the chainload entry above is confirmed working.
+        menuentry "CachyOS (direct kernel)" --class cachyos --class arch {
+          insmod part_gpt
+          insmod fat
+          search --no-floppy --fs-uuid --set=root ${cfg.grub.cachyEspUuid}
+          linux /vmlinuz-linux-cachyos root=UUID=${cfg.grub.cachyRootUuid} rw rootflags=subvol=/@ quiet nowatchdog splash
+          initrd /amd-ucode.img /initramfs-linux-cachyos.img
         }
       '';
     };
