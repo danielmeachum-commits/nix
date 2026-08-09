@@ -1,5 +1,13 @@
 { config, pkgs, lib, inputs, ... }:
 
+let
+  # Shared by the user's COSMIC session and the greeter's cosmic-comp — see the
+  # long note at the use site below for what each one works around.
+  cosmicCompWorkarounds = {
+    COSMIC_RENDER_DEVICE = "0x1002:0x150e";
+    COSMIC_DISABLE_DIRECT_SCANOUT = "1";
+  };
+in
 {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -22,25 +30,40 @@
   services.displayManager.gdm.enable = false;
   services.displayManager.cosmic-greeter.enable = true;
 
-  # Pin cosmic-comp's render device to the AMD iGPU (0x1002:0x150e, the Radeon
-  # 890M at 65:00.0). The built-in panel (eDP-1) hangs off the iGPU, but
-  # cosmic-comp 1.5 was picking the NVIDIA dGPU as its render device while
-  # scanning out on the iGPU. Every frame then had to cross GPUs, and
-  # NVIDIA's block-linear buffer modifiers can't be imported by amdgpu, so
-  # imports failed outright:
+  # Two cosmic-comp workarounds, both needed since the 2026-08-09 flake update
+  # took cosmic-comp 1.0.10 -> 1.5.0. They have to reach two places: the user's
+  # COSMIC session, and the greeter's own cosmic-comp — the latter runs as the
+  # `cosmic-greeter` user under greetd, which does NOT read
+  # environment.sessionVariables, so without the systemd.services.greetd copy
+  # the login screen keeps the artifacts.
+  #
+  # COSMIC_RENDER_DEVICE — pin the render device to the AMD iGPU (0x1002:0x150e,
+  # the Radeon 890M at 65:00.0). The built-in panel (eDP-1) hangs off the iGPU,
+  # but cosmic-comp 1.5 picked the NVIDIA dGPU to render on while scanning out
+  # on the iGPU. Every frame then crossed GPUs, and NVIDIA's block-linear buffer
+  # modifiers can't be imported by amdgpu, so the imports failed outright:
   #   cosmic-comp: Failed to render texture ..., import for wrong devices
   #   DrmNode { dev: 57985, ty: Render }, modifier: Unrecognized(0x2000000104abb04)
-  # which showed up as blurring and stale/torn regions on redraw. Rendering on
-  # the GPU that owns the display removes the cross-GPU copy entirely. The dGPU
-  # is untouched for CUDA and PRIME offload (see modules/system/llama.nix).
+  # Rendering on the GPU that owns the display removes the cross-GPU copy.
+  # The dGPU is untouched for CUDA and PRIME offload (modules/system/llama.nix).
   # Accepts "0xVENDOR:0xDEVICE" or a DRM node path; the PCI ID form is used
   # because renderD* numbering isn't stable across boots.
-  environment.sessionVariables.COSMIC_RENDER_DEVICE = "0x1002:0x150e";
-
-  # The greeter runs its own cosmic-comp as the `cosmic-greeter` user under
-  # greetd, which doesn't pick up environment.sessionVariables, so it needs the
-  # same pin or the login screen keeps the artifacts.
-  systemd.services.greetd.environment.COSMIC_RENDER_DEVICE = "0x1002:0x150e";
+  #
+  # COSMIC_DISABLE_DIRECT_SCANOUT — works around pop-os/cosmic-comp#2336:
+  # greenish blocks of corruption at the bottom of a window on any redraw, on
+  # amdgpu. Direct scanout hands a client buffer straight to the display plane,
+  # bypassing compositing; on this AMD display pipeline that buffer gets scanned
+  # out corrupt. Diagnostic tell from the issue: the artifacts are visible on
+  # screen but absent from screenshots and screen recordings, because the
+  # composited framebuffer is correct and only the scanout path is wrong.
+  # NOT a kernel regression — upstream reporters see it on 6.17.x and 6.18.x
+  # alike. Dropping the panel from 120Hz to 60Hz also masks it (more timing
+  # slack for the scanout path) but costs the refresh rate, so prefer this.
+  # Parsed by cosmic-comp's bool_var, which accepts 1/true/yes/y.
+  # Revisit once #2336 is fixed upstream — direct scanout is a real power and
+  # latency win for fullscreen apps and games.
+  environment.sessionVariables = cosmicCompWorkarounds;
+  systemd.services.greetd.environment = cosmicCompWorkarounds;
 
   # opencode: terminal AI coding agent (also the engine OpenChamber drives).
   # OpenChamber has no Linux desktop build despite its README — the supported
