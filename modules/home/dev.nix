@@ -50,7 +50,7 @@
         black
 
         # ---- Node ----
-        nodejs_25           # bundles npm
+        nodejs_24           # bundles npm; LTS (25 was removed at EOL 2026-06-01)
         pnpm
         yarn
         bun

@@ -27,8 +27,7 @@
   # `packages` (no nixosModule/overlay), so it has to be referenced explicitly.
   # Laptop-only by living in this host module rather than configuration.nix.
   environment.systemPackages = with pkgs; [
-    antigravity
-    darkly-qt5
+    antigravity-ide
     darkly
     libreoffice
     opencode

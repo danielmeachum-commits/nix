@@ -76,7 +76,9 @@
     };
 
     home.packages = with pkgs; [
-      jetbrains.idea-oss
+      # jetbrains.idea-oss dropped 2026-08-09: nixpkgs stopped updating it and
+      # marked it insecure (NIXPKGS-2026-2269). Install IDEs through
+      # jetbrains-toolbox instead, which manages them outside Nix.
       jetbrains-toolbox
       nil
       nixpkgs-fmt
