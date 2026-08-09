@@ -11,6 +11,12 @@
   # KDE Plasma 6 available alongside GNOME — pick via the gear icon on the GDM password prompt.
   services.desktopManager.plasma6.enable = true;
 
+  # COSMIC (System76's Rust DE), likewise a third session at the GDM picker:
+  # its module drops cosmic-session into services.displayManager.sessionPackages,
+  # so cosmic-greeter isn't needed and GDM stays the only display manager.
+  # Wayland-only — no X11 session to fall back to.
+  services.desktopManager.cosmic.enable = true;
+
   # opencode: terminal AI coding agent (also the engine OpenChamber drives).
   # OpenChamber has no Linux desktop build despite its README — the supported
   # Linux path is the `@openchamber/web` npm package, installed imperatively
