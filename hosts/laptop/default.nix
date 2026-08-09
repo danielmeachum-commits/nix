@@ -5,17 +5,42 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
-  # KDE Plasma 6 available alongside GNOME — pick via the gear icon on the GDM password prompt.
+  # KDE Plasma 6 available alongside GNOME — pick via the session picker on the
+  # greeter's password prompt.
   services.desktopManager.plasma6.enable = true;
 
-  # COSMIC (System76's Rust DE), likewise a third session at the GDM picker:
-  # its module drops cosmic-session into services.displayManager.sessionPackages,
-  # so cosmic-greeter isn't needed and GDM stays the only display manager.
+  # COSMIC (System76's Rust DE), likewise a third session at the picker.
   # Wayland-only — no X11 session to fall back to.
   services.desktopManager.cosmic.enable = true;
+
+  # cosmic-greeter replaces GDM as the login screen. It reads
+  # services.displayManager.sessionPackages the same way GDM did, so GNOME,
+  # Plasma, COSMIC and the gamescope session all stay selectable from its
+  # session picker. It pulls in greetd, which is what actually runs it.
+  services.displayManager.gdm.enable = false;
+  services.displayManager.cosmic-greeter.enable = true;
+
+  # Pin cosmic-comp's render device to the AMD iGPU (0x1002:0x150e, the Radeon
+  # 890M at 65:00.0). The built-in panel (eDP-1) hangs off the iGPU, but
+  # cosmic-comp 1.5 was picking the NVIDIA dGPU as its render device while
+  # scanning out on the iGPU. Every frame then had to cross GPUs, and
+  # NVIDIA's block-linear buffer modifiers can't be imported by amdgpu, so
+  # imports failed outright:
+  #   cosmic-comp: Failed to render texture ..., import for wrong devices
+  #   DrmNode { dev: 57985, ty: Render }, modifier: Unrecognized(0x2000000104abb04)
+  # which showed up as blurring and stale/torn regions on redraw. Rendering on
+  # the GPU that owns the display removes the cross-GPU copy entirely. The dGPU
+  # is untouched for CUDA and PRIME offload (see modules/system/llama.nix).
+  # Accepts "0xVENDOR:0xDEVICE" or a DRM node path; the PCI ID form is used
+  # because renderD* numbering isn't stable across boots.
+  environment.sessionVariables.COSMIC_RENDER_DEVICE = "0x1002:0x150e";
+
+  # The greeter runs its own cosmic-comp as the `cosmic-greeter` user under
+  # greetd, which doesn't pick up environment.sessionVariables, so it needs the
+  # same pin or the login screen keeps the artifacts.
+  systemd.services.greetd.environment.COSMIC_RENDER_DEVICE = "0x1002:0x150e";
 
   # opencode: terminal AI coding agent (also the engine OpenChamber drives).
   # OpenChamber has no Linux desktop build despite its README — the supported
@@ -58,7 +83,7 @@
   # Steam. The 32-bit graphics stack it needs is already on via
   # custom.nvidia (hardware.graphics.enable32Bit), as is pipewire's
   # alsa.support32Bit. gamescopeSession gives a Big Picture-style session
-  # selectable from GDM.
+  # selectable from the greeter.
   programs.steam = {
     enable = true;
     gamescopeSession.enable = true;

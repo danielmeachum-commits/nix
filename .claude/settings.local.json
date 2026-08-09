@@ -110,7 +110,9 @@
       "Bash(pnpm --version)",
       "Bash(pnpm store *)",
       "Bash(podman ps *)",
-      "Bash(systemctl list-timers *)"
+      "Bash(systemctl list-timers *)",
+      "Bash(sudo -n cat /sys/module/nvidia_drm/parameters/modeset /sys/module/nvidia_drm/parameters/fbdev)",
+      "Bash(sudo -n nix-env --list-generations -p /nix/var/nix/profiles/system)"
     ]
   }
 }
