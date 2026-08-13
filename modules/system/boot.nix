@@ -14,6 +14,11 @@ in
         default = "D415-6380";
         description = "Filesystem UUID of the EFI partition containing the Windows boot manager.";
       };
+      archEspUuid = lib.mkOption {
+        type = lib.types.str;
+        default = "A035-1898";
+        description = "Filesystem UUID of the EFI partition holding the Arch unified kernel image.";
+      };
     };
   };
 
@@ -45,6 +50,16 @@ in
           insmod chain
           search --no-floppy --fs-uuid --set=root ${cfg.grub.windowsEspUuid}
           chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+        }
+        # Arch ships a unified kernel image (kernel+initramfs+cmdline in one
+        # PE binary), so GRUB chainloads it directly -- there is no
+        # systemd-boot binary on that ESP to hand off to.
+        menuentry "Arch Linux" --class arch --hotkey=a {
+          insmod part_gpt
+          insmod fat
+          insmod chain
+          search --no-floppy --fs-uuid --set=root ${cfg.grub.archEspUuid}
+          chainloader /EFI/Linux/arch-linux.efi
         }
       '';
     };
